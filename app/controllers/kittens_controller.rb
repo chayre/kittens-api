@@ -22,16 +22,13 @@ class KittensController < ApplicationController
   # POST /kittens or /kittens.json
   def create
     @kitten = Kitten.new(kitten_params)
-
-    respond_to do |format|
       if @kitten.save
-        format.html { redirect_to kitten_url(@kitten), notice: "Kitten was successfully created." }
-        format.json { render :show, status: :created, location: @kitten }
+        flash[:notice] = 'Succesfully created!'
+        redirect_to kittens_path
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @kitten.errors, status: :unprocessable_entity }
+        # status: unprocessable_entity solves bug with turbo in Rails 7 that prevents errors from being shown
+        render 'new', status: :unprocessable_entity
       end
-    end
   end
 
   # PATCH/PUT /kittens/1 or /kittens/1.json
